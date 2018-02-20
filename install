@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# P4D 2017.2/1611521
+wget ftp://ftp.perforce.com/perforce/r17.2/bin.linux26x86_64/p4d
+wget ftp://ftp.perforce.com/perforce/r17.2/bin.linux26x86_64/p4
+chmod +x p4d
+chmod +x p4
+
+sudo mv p4d /usr/local/bin
+sudo mv p4  /usr/local/bin
+
+#sudo adduser perforce
+#sudo apt-get install daemon
+
+sudo wget -O "/etc/init.d/p4dservice" https://raw.githubusercontent.com/weak-head/perforce-server-setup/master/p4dservice
+sudo chmod +x /etc/init.d/p4dservice
+sudo update-rc.d /etc/init.d/p4dservice defaults

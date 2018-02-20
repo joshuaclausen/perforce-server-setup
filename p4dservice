@@ -1,0 +1,49 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          p4dservice
+# Required-Start:    $local_fs $network
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: p4dservice
+# Description:       Perforce server service
+### END INIT INFO
+
+export P4JOURNAL=/srv/dev-disk-by-id-md-name-abyss-watcher-tower/perforce-data/journal
+export P4LOG=/srv/dev-disk-by-id-md-name-abyss-watcher-tower/perforce-data/log
+export P4ROOT=/srv/dev-disk-by-id-md-name-abyss-watcher-tower/perforce-data
+export P4PORT=1666
+
+PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+
+. /lib/lsb/init-functions
+
+p4start="p4d -d"
+p4stop="p4 admin stop"
+p4user=perforce
+
+case "$1" in
+    start)
+        log_action_begin_msg "Starting Perforce Server"
+        # daemon -u $p4user -- $p4start;
+        p4d -d; # not a good idea to run perforce server as root
+        ;;
+
+    stop)
+        log_action_begin_msg "Stopping Perforce Server"
+        # daemon -u $p4user -- $p4stop;
+        p4 admin stop; # special permissions are required for this to work
+        ;;
+
+    restart)
+        stop
+        start
+        ;;
+
+    *)
+        echo "Usage: /etc/init.d/p4dservice (start|stop|restart)"
+        exit 1
+        ;;
+
+esac
+exit 0
